@@ -31,7 +31,7 @@ class Bomb
 		# NOTE: Meshのpositionを他のVector3オブジェクトと同じにするには、copyメソッドを使ってVector3オブジェクトを複製
 		#       して利用する点に注意。
 		@mesh.position.copy(pos)
-		@mesh.position.y -= 1.0
+		@mesh.position.y -= 2.0
 	end
 
 	# 爆弾を1フレーム分移動させる。

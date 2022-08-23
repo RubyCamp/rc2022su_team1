@@ -4,7 +4,7 @@ require 'mittsu'
 scene = Mittsu::Scene.new
 camera = Mittsu::PerspectiveCamera.new(75.0, 1.333, 0.1, 1000.0)
 camera.position.z = 2
-renderer = Mittsu::OpenGLRenderer.new width: 800, height: 600, title: 'RubyCamp 2022'
+renderer = Mittsu::OpenGLRenderer.new width: 800, height: 600, title: 'RubyCamp 2022 team01'
 
 # ラケット１
 racket1_width = 0.2

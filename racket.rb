@@ -56,10 +56,10 @@ renderer.window.run do
     distance2 = mesh2.position.distance_to(mesh3.position)
 
     if distance_Flag == 0
-        # 大きい方の球を1フレーム分小さな球に接近させる
+        # racket1にボールが近づく
         mesh3.position.x += 0.03
     else
-        # 大きい方の球を1フレーム分小さな球に離れさせる
+        # racket2にボールが近づく
         mesh3.position.x -= 0.03
     end
 

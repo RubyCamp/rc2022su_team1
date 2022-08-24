@@ -4,7 +4,7 @@ require 'mittsu'
 scene = Mittsu::Scene.new
 camera = Mittsu::PerspectiveCamera.new(75.0, 1.333, 0.1, 1000.0)
 camera.position.z = 2
-renderer = Mittsu::OpenGLRenderer.new width: 800, height: 600, title: 'RubyCamp 2022 team01'
+renderer = Mittsu::OpenGLRenderer.new width: 800, height: 600, title: 'RubyCamp 2022'
 
 # ラケット１
 racket1_width = 0.2
@@ -50,17 +50,27 @@ distance_Flag = 0
 # ラケットとボールが接触したと判定する距離
 contact_distance = ((racket1_width + racket2_width)/2).to_f
 
+# randomな数を生成。ボールが不規則に動くのに使用
+random_x = Random.new()
+random_y = Random.new()
+
 renderer.window.run do
     # ラケットとボールの間の距離を計算
     distance1 = mesh1.position.distance_to(mesh3.position)
     distance2 = mesh2.position.distance_to(mesh3.position)
 
+    # randomな数を生成。ボールが不規則に動くのに使用
+    random_x = random_x.rand(0.01..0.1)
+    random_y = random_y.rand(0.01..0.1)
+
     if distance_Flag == 0
         # racket1にボールが近づく
-        mesh3.position.x += 0.03
+        mesh3.position.x += random_x
+        mesh3.position.y += random_y
     else
         # racket2にボールが近づく
-        mesh3.position.x -= 0.03
+        mesh3.position.x -= random_x
+        mesh3.position.y -= random_y
     end
 
     # 得られた距離が、互いのwidthの合計値以下になったら触れたと判定する
@@ -71,3 +81,4 @@ renderer.window.run do
     end
 renderer.render(scene, camera)
 end
+# TODO developブランチのファイルを読み込む

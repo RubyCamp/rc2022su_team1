@@ -3,6 +3,7 @@ require 'mittsu'
 
 #他ファイルの読み込み
 require_relative 'table'
+require_relative 'item'
 
 # ウィンドウの大きさの定義
 SCREEN_WIDTH = 800
@@ -52,7 +53,10 @@ tableLeg_right = create_tableRightLegs
 scene.add(sphere,raketto_a,raketto_b,table,tableLeg_left,tableLeg_right)
 
 dx = 1
-# レンダリングをしてくださいと命令する処理かな？
+
+start_time = Time.now
+
+# レンダリングをしてくださいと命令する処理かな？毎フレーム
 renderer.window.run do
   # シーンに追加した球体をランダムに移動させる処理
   sphere.position.x += dx
@@ -86,6 +90,19 @@ renderer.window.run do
   if distance <= 1.5
     dx = -1
   end
+
+  #５秒間隔でアイテムが生成されてない場合にアイテム生成
+  elapsed_time = (Time.now. - start_time).round(0)
+  p elapsed_time
+  
+    #６秒ごとに約１個アイテムを生成
+    if (elapsed_time % 6) == 1
+      hoge = rand(1..60)
+      if hoge == 1
+        item = create_item
+        scene.add(item)
+      end
+    end
 
   #卓球台の位置調整
   table.position.x = 0

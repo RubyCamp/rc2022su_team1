@@ -52,17 +52,26 @@ tableLeg_right = create_tableRightLegs
 scene.add(sphere,raketto_a,raketto_b,table,tableLeg_left,tableLeg_right)
 
 dx = 1
+flag = 0  # ボールを動かすかのフラグ
+
 # レンダリングをしてくださいと命令する処理かな？
 renderer.window.run do
+  # ボールがラケットより後ろに行った後原点に戻り一時停止する。spaceを押したら再度ボールが動く
+  if renderer.window.key_down?(GLFW_KEY_SPACE)
+    flag = 0
+  end
+
   # シーンに追加した球体をランダムに移動させる処理
-  sphere.position.x += dx
+  if flag == 0
+    sphere.position.x += dx
+  end
   
   #ラケットA
   raketto_a.position.x = -40
-  if renderer.window.key_down?(GLFW_KEY_DOWN)
+  if renderer.window.key_down?(GLFW_KEY_S)
     raketto_a.position.y -= 1
   end
-  if renderer.window.key_down?(GLFW_KEY_UP)
+  if renderer.window.key_down?(GLFW_KEY_W)
     raketto_a.position.y += 1
   end
 
@@ -74,10 +83,10 @@ renderer.window.run do
 
   #ラケットB
   raketto_b.position.x = 40
-  if renderer.window.key_down?(GLFW_KEY_W)
+  if renderer.window.key_down?(GLFW_KEY_DOWN)
     raketto_b.position.y -= 1
   end
-  if renderer.window.key_down?(GLFW_KEY_S)
+  if renderer.window.key_down?(GLFW_KEY_UP)
     raketto_b.position.y += 1
   end
 
@@ -85,6 +94,15 @@ renderer.window.run do
   distance = sphere.position.distance_to(raketto_b.position)
   if distance <= 1.5
     dx = -1
+  end
+
+  # ボールがラケットより後ろに行った時の処理
+  #* ラケットより後ろに行く→原点に移動。この時移動を止める。spaceキーで再度動かすように実装
+  if sphere.position.x < -40 or sphere.position.x > 40
+    scene.remove(sphere)
+    sphere.position.x = 0
+    scene.add(sphere)
+    flag = 1
   end
 
   #卓球台の位置調整

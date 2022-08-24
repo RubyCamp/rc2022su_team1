@@ -12,7 +12,7 @@ class TextBoard
 		@mesh = MeshFactory.generate(
 			geom_type: :plane,
 			mat_type: :lambert,
-			scale_x: 10.0,
+			scale_x: 4.0,
 			scale_y: 1.0,
 			segment_x: 10,
 			segment_y: 1,

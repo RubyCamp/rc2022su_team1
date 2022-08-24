@@ -87,11 +87,14 @@ raketto_x = 40  #ラケットのx座標の絶対値
 box_a.position.x = -1 * (box_distance + raketto_x)  #box_distanceはラケットとブロックの距離なので原点からラケットまでの距離を加算する
 box_b.position.x = 1 * (box_distance + raketto_x)#TODO 当たり判定の位置微調整
 
+#ボールの移動方向とスピード
 dx = 1
+dy = 0
 flag = 0  # ボールを動かすかのフラグ
 
 # レンダリングをしてくださいと命令する処理かな？
 renderer.window.run do
+  random_Number = rand(0..0.1)
   # ボールがラケットより後ろに行った後原点に戻り一時停止する。spaceを押したら再度ボールが動く
   if renderer.window.key_down?(GLFW_KEY_SPACE)
     flag = 0
@@ -100,6 +103,7 @@ renderer.window.run do
   # シーンに追加した球体をランダムに移動させる処理
   if flag == 0
     sphere.position.x += dx
+    sphere.position.y += dy
   end
   
   #ラケットA
@@ -118,6 +122,7 @@ renderer.window.run do
   #当たり判定
   if distance <= box_distance + sphere_radius
     dx = 1
+    dy = random_Number
   end
 
   #ラケットB
@@ -136,6 +141,7 @@ renderer.window.run do
   #当たり判定
   if distance <= box_distance + sphere_radius
     dx = -1
+    dy = -1 * random_Number
   end
 
   # ボールがラケットより後ろに行った時の処理

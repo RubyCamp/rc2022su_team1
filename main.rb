@@ -223,6 +223,30 @@ renderer.window.run do
   score_board_left.draw_score(score_left)
   score_board_right.draw_score(score_right)
 
+  #4点以上で勝利(左)
+  if score_left >= 4
+    raketto_a.rotation.x += 0.1
+    scene.remove(raketto_b)
+    if renderer.window.key_down?(GLFW_KEY_SPACE)
+      score_left = 0
+      score_right = 0
+      raketto_a.rotation.x = 0
+      scene.add(raketto_b)
+    end
+  end
+
+  #4点以上で勝利(右)
+  if score_right >= 4
+    raketto_b.rotation.x += 0.1
+    scene.remove(raketto_a)
+    if renderer.window.key_down?(GLFW_KEY_SPACE)
+      score_left = 0
+      score_right = 0
+      raketto_b.rotation.x = 0
+      scene.add(raketto_a)
+    end
+  end
+
   #カメラが座標(0,0,0)を見続ける
   camera.look_at(Mittsu::Vector3.new(0, 0, 0))
 

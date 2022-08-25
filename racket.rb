@@ -12,7 +12,7 @@ racket1_height = 2
 racket1_depth = 2
 
 geom1 = Mittsu::BoxGeometry.new(racket1_width, racket1_height, racket1_depth)
-mat1 = Mittsu::MeshPhongMaterial.new(color: 0xff0000)
+mat1 = Mittsu::MeshBasicMaterial.new(color: 0xff0000)
 mesh1 = Mittsu::Mesh.new(geom1, mat1)
 scene.add(mesh1)
 
@@ -22,7 +22,7 @@ racket2_height = 2
 racket2_depth = 2
 
 geom2 = Mittsu::BoxGeometry.new(racket2_width, racket2_height, racket2_depth)
-mat2 = Mittsu::MeshPhongMaterial.new(color: 0x0000ff)
+mat2 = Mittsu::MeshBasicMaterial.new(color: 0x0000ff)
 mesh2 = Mittsu::Mesh.new(geom2, mat2)
 scene.add(mesh2)
 
@@ -32,7 +32,7 @@ boll_width_segments = 8
 boll_height_segments = 8
 
 geom3 = Mittsu::SphereGeometry.new(boll_radius, boll_width_segments, boll_height_segments)
-mat3 = Mittsu::MeshPhongMaterial.new(color: 0x00ff00)
+mat3 = Mittsu::MeshBasicMaterial.new(color: 0x00ff00)
 mesh3 = Mittsu::Mesh.new(geom3, mat3)
 scene.add(mesh3)
 

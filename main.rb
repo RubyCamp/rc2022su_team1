@@ -16,7 +16,7 @@ SCREEN_HEIGHT = 600
 ASPECT = SCREEN_WIDTH.to_f / SCREEN_HEIGHT.to_f
 
 # ウィンドウのレンダリングの定義
-renderer = Mittsu::OpenGLRenderer.new width: SCREEN_WIDTH, height: SCREEN_HEIGHT, title: 'game title'
+renderer = Mittsu::OpenGLRenderer.new width: SCREEN_WIDTH, height: SCREEN_HEIGHT, title: '3D ping pong battle!'
 
 # シーンの導入
 scene = Mittsu::Scene.new

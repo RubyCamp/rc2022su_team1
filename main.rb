@@ -29,6 +29,17 @@ camera.position.z = 50.0
 # camera.position.z = 50.0 - 48
 # camera.position.x = 40
 
+# ライトの追加
+light = Mittsu::DirectionalLight.new(0xffffff)
+light.position.set(1, 10, 40)
+scene.add(light)
+light2 = Mittsu::DirectionalLight.new(0xffffff)
+light2.position.set(-20, 10, -40)
+scene.add(light2)
+light3 = Mittsu::DirectionalLight.new(0xffffff)
+light3.position.set(20, 10, -40)
+scene.add(light3)
+
 # オブジェクト(球体)の定義
 sphere_radius = 1.0
 sphere = create_sphere(sphere_radius)

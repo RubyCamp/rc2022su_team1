@@ -4,8 +4,8 @@ require 'mittsu'
 # ボール
 def create_sphere(sphere_radius)
   Mittsu::Mesh.new(
-  Mittsu::SphereGeometry.new(sphere_radius, 16, 16),
-  Mittsu::MeshBasicMaterial.new(color: 0x00ff00)
+  Mittsu::SphereGeometry.new(sphere_radius, 18, 18),
+  Mittsu::MeshPhongMaterial.new(color: 0xffa500)
 )
 end
 
@@ -13,7 +13,7 @@ end
 def create_raketto_a(raketto_a_width, raketto_a_height, raketto_a_depth)
   Mittsu::Mesh.new(
   Mittsu::BoxGeometry.new(raketto_a_width, raketto_a_height, raketto_a_depth),
-  Mittsu::MeshBasicMaterial.new(color: 0X0000FF, wireframe:false)
+  Mittsu::MeshPhongMaterial.new(color: 0X0000FF, wireframe:false)
 )
 end
 
@@ -21,7 +21,7 @@ end
 def create_raketto_b(raketto_b_width, raketto_b_height, raketto_b_depth)
   Mittsu::Mesh.new(
   Mittsu::BoxGeometry.new(raketto_b_width, raketto_b_height, raketto_b_depth),
-  Mittsu::MeshBasicMaterial.new(color: 0XFF0000, wireframe:false)
+  Mittsu::MeshPhongMaterial.new(color: 0XFF0000, wireframe:false)
 )
 end
 
@@ -29,7 +29,7 @@ end
 def create_box_a
   Mittsu::Mesh.new(
   Mittsu::SphereGeometry.new(1, 16, 16),
-  Mittsu::MeshBasicMaterial.new(color: 0XFF0000, wireframe:false)
+  Mittsu::MeshPhongMaterial.new(color: 0XFF0000, wireframe:false)
 )
 end
 
@@ -37,7 +37,7 @@ end
 def create_box_b
   Mittsu::Mesh.new(
   Mittsu::SphereGeometry.new(1, 16, 16),
-  Mittsu::MeshBasicMaterial.new(color: 0X0000FF, wireframe:false)
+  Mittsu::MeshPhongMaterial.new(color: 0X0000FF, wireframe:false)
 )
 end
 
@@ -45,7 +45,7 @@ end
 def create_table_box
   Mittsu::Mesh.new(
   Mittsu::SphereGeometry.new(1, 16, 16),
-  Mittsu::MeshBasicMaterial.new(color: 0X00FF00, wireframe:false)
+  Mittsu::MeshPhongMaterial.new(color: 0X00FF00, wireframe:false)
 )
 end
 
@@ -53,7 +53,7 @@ end
 def create_table
   Mittsu::Mesh.new(
   Mittsu::PlaneGeometry.new(67, 40, 40),
-  Mittsu::MeshBasicMaterial.new(color: 0X3F85CD)
+  Mittsu::MeshPhongMaterial.new(color: 0X3F85CD)
   )
 end
 
@@ -61,7 +61,7 @@ end
 def create_tableLeftLegs
   mesh = Mittsu::Mesh.new(
   Mittsu::BoxGeometry.new(5, 5, 40),
-  Mittsu::MeshBasicMaterial.new(color: 0XA9A9A9)
+  Mittsu::MeshPhongMaterial.new(color: 0XA9A9A9)
   )
   mesh.position.set(-43.5,-11.8,-40)
   return mesh
@@ -71,7 +71,7 @@ end
 def create_tableRightLegs
   mesh = Mittsu::Mesh.new(
   Mittsu::BoxGeometry.new(5, 5, 40),
-  Mittsu::MeshBasicMaterial.new(color: 0XA9A9A9)
+  Mittsu::MeshPhongMaterial.new(color: 0XA9A9A9)
   )
   mesh.position.set(43.5,-11.8,-40)
   return mesh

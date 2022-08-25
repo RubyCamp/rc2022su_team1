@@ -16,7 +16,7 @@ SCREEN_HEIGHT = 600
 ASPECT = SCREEN_WIDTH.to_f / SCREEN_HEIGHT.to_f
 
 # ウィンドウのレンダリングの定義
-renderer = Mittsu::OpenGLRenderer.new width: SCREEN_WIDTH, height: SCREEN_HEIGHT, title: 'game title'
+renderer = Mittsu::OpenGLRenderer.new width: SCREEN_WIDTH, height: SCREEN_HEIGHT, title: '3D ping pong battle!'
 
 # シーンの導入
 scene = Mittsu::Scene.new
@@ -28,6 +28,17 @@ camera.position.y = - 35.0
 camera.position.z = 50.0
 # camera.position.z = 50.0 - 48
 # camera.position.x = 40
+
+# ライトの追加
+light = Mittsu::DirectionalLight.new(0xffffff)
+light.position.set(1, 10, 40)
+scene.add(light)
+light2 = Mittsu::DirectionalLight.new(0xffffff)
+light2.position.set(-20, 10, -40)
+scene.add(light2)
+light3 = Mittsu::DirectionalLight.new(0xffffff)
+light3.position.set(20, 10, -40)
+scene.add(light3)
 
 # オブジェクト(球体)の定義
 sphere_radius = 1.0
@@ -98,6 +109,8 @@ dx = 1
 dy = 0
 dz = -0.1
 flag = 0  # ボールを動かすかのフラグ
+#ラケットの速度
+SPEED_raketto = 0.5
 
 # レンダリングをしてくださいと命令する処理かな？毎フレーム
 renderer.window.run do
@@ -117,20 +130,20 @@ renderer.window.run do
   #ラケットA
   raketto_a.position.x = -1 * raketto_x
   if renderer.window.key_down?(GLFW_KEY_D)
-    box_a.position.y += 1
-    raketto_a.position.y += 1
+    box_a.position.y += SPEED_raketto
+    raketto_a.position.y += SPEED_raketto
   end
   if renderer.window.key_down?(GLFW_KEY_A)
-    box_a.position.y -= 1
-    raketto_a.position.y -= 1
+    box_a.position.y -= SPEED_raketto
+    raketto_a.position.y -= SPEED_raketto
   end
   if renderer.window.key_down?(GLFW_KEY_W)
-    box_a.position.z += 1
-    raketto_a.position.z += 1
+    box_a.position.z += SPEED_raketto
+    raketto_a.position.z += SPEED_raketto
   end
   if renderer.window.key_down?(GLFW_KEY_S)
-    box_a.position.z -= 1
-    raketto_a.position.z -= 1
+    box_a.position.z -= SPEED_raketto
+    raketto_a.position.z -= SPEED_raketto
   end
 
   #ボールとラケットA側の当たり判定ボックスとの距離
@@ -145,20 +158,20 @@ renderer.window.run do
   #ラケットB
   raketto_b.position.x = 1 * raketto_x
   if renderer.window.key_down?(GLFW_KEY_UP)
-    box_b.position.z += 1
-    raketto_b.position.z += 1
+    box_b.position.z += SPEED_raketto
+    raketto_b.position.z += SPEED_raketto
   end
   if renderer.window.key_down?(GLFW_KEY_DOWN)
-    box_b.position.z -= 1
-    raketto_b.position.z -= 1
+    box_b.position.z -= SPEED_raketto
+    raketto_b.position.z -= SPEED_raketto
   end
   if renderer.window.key_down?(GLFW_KEY_LEFT)
-    box_b.position.y += 1
-    raketto_b.position.y += 1
+    box_b.position.y += SPEED_raketto
+    raketto_b.position.y += SPEED_raketto
   end
   if renderer.window.key_down?(GLFW_KEY_RIGHT)
-    box_b.position.y -= 1
-    raketto_b.position.y -= 1
+    box_b.position.y -= SPEED_raketto
+    raketto_b.position.y -= SPEED_raketto
   end
 
   #ボールとラケットB側の当たり判定ボックスとの距離

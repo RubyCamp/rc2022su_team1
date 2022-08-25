@@ -210,6 +210,7 @@ renderer.window.run do
     scene.remove(sphere)
     sphere.position.x = 0
     sphere.position.y = 0
+    sphere.position.z = 0
     scene.add(sphere)
     flag = 1
     score_left += 1

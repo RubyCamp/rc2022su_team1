@@ -5,6 +5,7 @@ require 'mittsu'
 require_relative 'table'
 require_relative 'mesh_factory'
 require_relative 'score_board'
+require_relative 'background'
 
 # ウィンドウの大きさの定義
 SCREEN_WIDTH = 800
@@ -94,9 +95,16 @@ score_board_right =ScoreBoard.new(x: 15, y: -26, z:32)
 score_left = 0
 score_right = 0
 
+#背景
+ground_image = create_ground_image
+sky_image = create_sky_image
+left_wall = create_left_image
+right_wall = create_right_image
+
 # シーンにオブジェクトを追加する処理
 scene.add(sphere, raketto_a, raketto_b, box_a, box_b, table,
-          tableLeg_left, tableLeg_right, table_box,score_board_left.container,score_board_right.container)
+          tableLeg_left, tableLeg_right, table_box,score_board_left.container,
+          score_board_right.container,ground_image,sky_image,left_wall,right_wall)
 
 # 位置調整
 raketto_x = 40  #ラケットのx座標の絶対値

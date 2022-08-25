@@ -109,6 +109,8 @@ dx = 1
 dy = 0
 dz = -0.1
 flag = 0  # ボールを動かすかのフラグ
+#ラケットの速度
+SPEED_raketto = 0.5
 
 # レンダリングをしてくださいと命令する処理かな？毎フレーム
 renderer.window.run do
@@ -128,20 +130,20 @@ renderer.window.run do
   #ラケットA
   raketto_a.position.x = -1 * raketto_x
   if renderer.window.key_down?(GLFW_KEY_D)
-    box_a.position.y += 1
-    raketto_a.position.y += 1
+    box_a.position.y += SPEED_raketto
+    raketto_a.position.y += SPEED_raketto
   end
   if renderer.window.key_down?(GLFW_KEY_A)
-    box_a.position.y -= 1
-    raketto_a.position.y -= 1
+    box_a.position.y -= SPEED_raketto
+    raketto_a.position.y -= SPEED_raketto
   end
   if renderer.window.key_down?(GLFW_KEY_W)
-    box_a.position.z += 1
-    raketto_a.position.z += 1
+    box_a.position.z += SPEED_raketto
+    raketto_a.position.z += SPEED_raketto
   end
   if renderer.window.key_down?(GLFW_KEY_S)
-    box_a.position.z -= 1
-    raketto_a.position.z -= 1
+    box_a.position.z -= SPEED_raketto
+    raketto_a.position.z -= SPEED_raketto
   end
 
   #ボールとラケットA側の当たり判定ボックスとの距離
@@ -156,20 +158,20 @@ renderer.window.run do
   #ラケットB
   raketto_b.position.x = 1 * raketto_x
   if renderer.window.key_down?(GLFW_KEY_UP)
-    box_b.position.z += 1
-    raketto_b.position.z += 1
+    box_b.position.z += SPEED_raketto
+    raketto_b.position.z += SPEED_raketto
   end
   if renderer.window.key_down?(GLFW_KEY_DOWN)
-    box_b.position.z -= 1
-    raketto_b.position.z -= 1
+    box_b.position.z -= SPEED_raketto
+    raketto_b.position.z -= SPEED_raketto
   end
   if renderer.window.key_down?(GLFW_KEY_LEFT)
-    box_b.position.y += 1
-    raketto_b.position.y += 1
+    box_b.position.y += SPEED_raketto
+    raketto_b.position.y += SPEED_raketto
   end
   if renderer.window.key_down?(GLFW_KEY_RIGHT)
-    box_b.position.y -= 1
-    raketto_b.position.y -= 1
+    box_b.position.y -= SPEED_raketto
+    raketto_b.position.y -= SPEED_raketto
   end
 
   #ボールとラケットB側の当たり判定ボックスとの距離

@@ -4,8 +4,8 @@ require 'mittsu'
 # ボール
 def create_sphere(sphere_radius)
   Mittsu::Mesh.new(
-  Mittsu::SphereGeometry.new(sphere_radius, 16, 16),
-  Mittsu::MeshPhongMaterial.new(color: 0x00ff00)
+  Mittsu::SphereGeometry.new(sphere_radius, 18, 18),
+  Mittsu::MeshPhongMaterial.new(color: 0xffa500)
 )
 end
 

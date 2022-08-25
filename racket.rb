@@ -43,14 +43,17 @@ mesh2.position.z = -4
 mesh2.position.x = -2
 mesh3.position.z = -4
 mesh3.position.x = -2
+mesh4.position.x = 0
+mesh4.position.z = -4
 
 # x軸を正向きに進むか負の向きに進むかのフラグ
 distance_Flag = 0
 
 # ラケットとボールが接触したと判定する距離
 contact_distance = ((racket1_width + racket2_width)/2).to_f
-
-contact_distance2 = 10
+# ボールとアイテムが接触したと判定する距離
+contact_distance2 = 1.5
+item_time = nil
 
 renderer.window.run do
     # ラケットとボールの間の距離を計算
@@ -66,10 +69,17 @@ renderer.window.run do
     end
 
     if distance3 <= contact_distance2
-        # ボールの大きさを変える
-       mesh3.scale.set(10,10,10)
+        item_time ||= Time.now
+        mesh3.scale.set(10,10,10)
         # アイテムを消す
        scene.remove(mesh4)
+    end
+    
+    if item_time
+     if (Time.now - item_time) >= 10
+        # ボールの大きさを変える
+        mesh3.scale.set(1,1,1)
+     end
     end
 
     # 得られた距離が、互いのwidthの合計値以下になったら触れたと判定する

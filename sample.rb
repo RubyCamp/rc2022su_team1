@@ -3,6 +3,8 @@ require 'mittsu'
 
 #他ファイルの読み込み
 require_relative 'table'
+require_relative 'mesh_factory'
+require_relative 'score_board'
 
 # ウィンドウの大きさの定義
 SCREEN_WIDTH = 800
@@ -86,8 +88,15 @@ tableLeg_left = create_tableLeftLegs
 #卓球台の右足
 tableLeg_right = create_tableRightLegs
 
+#スコアボード
+score_board_left =ScoreBoard.new(x: -20, y: -26, z:30)
+score_board_right =ScoreBoard.new(x: 15, y: -26, z:32)
+score_left = 0
+score_right = 0
+
 # シーンにオブジェクトを追加する処理
-scene.add(sphere, raketto_a, raketto_b, box_a, box_b, table, tableLeg_left, tableLeg_right, table_box)
+scene.add(sphere, raketto_a, raketto_b, box_a, box_b, table,
+          tableLeg_left, tableLeg_right, table_box,score_board_left.container,score_board_right.container)
 
 # 位置調整
 raketto_x = 40  #ラケットのx座標の絶対値
@@ -96,11 +105,12 @@ box_b.position.x = 1 * (box_distance + raketto_x)
 
 #ボールの移動方向とスピード
 dx = 1
+
 dy = 0
 dz = -0.1
 flag = 0  # ボールを動かすかのフラグ
 
-# レンダリングをしてくださいと命令する処理かな？
+# レンダリングをしてくださいと命令する処理かな？毎フレーム
 renderer.window.run do
   random_Number = rand(0..0.1)
   # ボールがラケットより後ろに行った後原点に戻り一時停止する。spaceを押したら再度ボールが動く
@@ -180,17 +190,29 @@ renderer.window.run do
 
   # ボールがラケットより後ろに行った時の処理
   # * ラケットより後ろに行く→原点に移動。この時移動を止める。spaceキーで再度動かすように実装
-  if sphere.position.x < -40 or sphere.position.x > 40
+  if sphere.position.x < -40
     scene.remove(sphere)
     sphere.position.x = 0
     sphere.position.y = 0
     sphere.position.z = 0
     scene.add(sphere)
     flag = 1
+    score_right += 1
+  elsif sphere.position.x > 40
+    scene.remove(sphere)
+    sphere.position.x = 0
+    sphere.position.y = 0
+    scene.add(sphere)
+    flag = 1
+    score_left += 1
   end
 
   #卓球台の位置調整
   table.position.x = 0
+
+  #スコアボードに得点を表示
+  score_board_left.draw_score(score_left)
+  score_board_right.draw_score(score_right)
 
   #カメラが座標(0,0,0)を見続ける
   camera.look_at(Mittsu::Vector3.new(0, 0, 0))

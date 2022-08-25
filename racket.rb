@@ -50,6 +50,8 @@ distance_Flag = 0
 # ラケットとボールが接触したと判定する距離
 contact_distance = ((racket1_width + racket2_width)/2).to_f
 
+contact_distance2 = 10
+
 renderer.window.run do
     # ラケットとボールの間の距離を計算
     distance1 = mesh1.position.distance_to(mesh3.position)
@@ -61,6 +63,13 @@ renderer.window.run do
     else
         # racket2にボールが近づく
         mesh3.position.x -= 0.03
+    end
+
+    if distance3 <= contact_distance2
+        # ボールの大きさを変える
+       mesh3.scale.set(10,10,10)
+        # アイテムを消す
+       scene.remove(mesh4)
     end
 
     # 得られた距離が、互いのwidthの合計値以下になったら触れたと判定する

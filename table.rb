@@ -5,7 +5,7 @@ require 'mittsu'
 def create_table
   Mittsu::Mesh.new(
   Mittsu::PlaneGeometry.new(67, 40, 40),
-  Mittsu::MeshBasicMaterial.new(color: 0X3F85CD, wireframe:true)
+  Mittsu::MeshBasicMaterial.new(color: 0X3F85CD, wireframe:false)
   )
 end
 

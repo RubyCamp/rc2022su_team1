@@ -19,12 +19,11 @@ scene = Mittsu::Scene.new
 
 # カメラの定義
 camera = Mittsu::PerspectiveCamera.new(75.0, ASPECT, 0.1, 1000.0)
-# camera.position.y = - 35.0
-camera.position.y = - 35.0 - 20
+camera.position.y = - 35.0
+# camera.position.y = - 35.0 - 20
+camera.position.z = 50.0
+# camera.position.z = 50.0 - 48
 # camera.position.x = 40
-# camera.position.z = 50.0
-camera.position.z = 50.0 - 48
-
 
 # オブジェクト(球体)の定義
 sphere_radius = 1.0
@@ -76,8 +75,8 @@ table_box = Mittsu::Mesh.new(
 )
 table_box.position.x = 0
 table_box.position.y = 0
-table_box.position.z = -5 #遠くに配置することで当たり判定が卓球台面上すべてにあるように見せかける
-table_distance = table_box.position.z - 2 #判定に使う変数
+table_box.position.z = -1000 #!遠くに配置することで当たり判定が卓球台面上すべてにあるように見せかける
+table_distance = (table_box.position.z - 2).abs #判定に使う変数
 
 
 #卓球台
@@ -118,13 +117,21 @@ renderer.window.run do
   
   #ラケットA
   raketto_a.position.x = -1 * raketto_x
-  if renderer.window.key_down?(GLFW_KEY_S)
+  if renderer.window.key_down?(GLFW_KEY_D)
+    box_a.position.y += 1
+    raketto_a.position.y += 1
+  end
+  if renderer.window.key_down?(GLFW_KEY_A)
     box_a.position.y -= 1
     raketto_a.position.y -= 1
   end
   if renderer.window.key_down?(GLFW_KEY_W)
-    box_a.position.y += 1
-    raketto_a.position.y += 1
+    box_a.position.z += 1
+    raketto_a.position.z += 1
+  end
+  if renderer.window.key_down?(GLFW_KEY_S)
+    box_a.position.z -= 1
+    raketto_a.position.z -= 1
   end
 
   #ボールとラケットA側の当たり判定ボックスとの距離
@@ -133,17 +140,26 @@ renderer.window.run do
   if distance <= box_distance + sphere_radius
     dx = 1
     dy = random_Number
+    dz *= -1
   end
 
   #ラケットB
   raketto_b.position.x = 1 * raketto_x
-  if renderer.window.key_down?(GLFW_KEY_DOWN)
-    box_b.position.y -= 1
-    raketto_b.position.y -= 1
-  end
   if renderer.window.key_down?(GLFW_KEY_UP)
+    box_b.position.z += 1
+    raketto_b.position.z += 1
+  end
+  if renderer.window.key_down?(GLFW_KEY_DOWN)
+    box_b.position.z -= 1
+    raketto_b.position.z -= 1
+  end
+  if renderer.window.key_down?(GLFW_KEY_LEFT)
     box_b.position.y += 1
     raketto_b.position.y += 1
+  end
+  if renderer.window.key_down?(GLFW_KEY_RIGHT)
+    box_b.position.y -= 1
+    raketto_b.position.y -= 1
   end
 
   #ボールとラケットB側の当たり判定ボックスとの距離
@@ -152,10 +168,16 @@ renderer.window.run do
   if distance <= box_distance + sphere_radius
     dx = -1
     dy = -1 * random_Number
+    dz *= -1
   end
 
   #ボールと卓球台の距離を求める
   distance_table_to_boll = sphere.position.distance_to(table_box.position)
+  #!----------------------------------------------------------------------
+  #!確認用。本番では消す
+  print "distance: #{distance_table_to_boll} <= #{table_distance}"
+  puts 
+  #!----------------------------------------------------------------------
   #当たり判定
   if distance_table_to_boll <= table_distance
     dz = 0.1

@@ -1,73 +1,164 @@
+# ライブラリの読み込み
 require 'mittsu'
-#TODO アイテム考慮して、外部から引数を受け取れるように設計
 
+#他ファイルの読み込み
+require_relative 'table'
+
+# ウィンドウの大きさの定義
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+
+# アスペクト比の定義
+ASPECT = SCREEN_WIDTH.to_f / SCREEN_HEIGHT.to_f
+
+# ウィンドウのレンダリングの定義
+renderer = Mittsu::OpenGLRenderer.new width: SCREEN_WIDTH, height: SCREEN_HEIGHT, title: 'game title'
+
+# シーンの導入
 scene = Mittsu::Scene.new
-camera = Mittsu::PerspectiveCamera.new(75.0, 1.333, 0.1, 1000.0)
-camera.position.z = 2
-renderer = Mittsu::OpenGLRenderer.new width: 800, height: 600, title: 'RubyCamp 2022'
 
-# ラケット１
-racket1_width = 0.2
-racket1_height = 2
-racket1_depth = 2
+# カメラの定義
+camera = Mittsu::PerspectiveCamera.new(75.0, ASPECT, 0.1, 1000.0)
+camera.position.y = - 35.0
+# camera.position.x = 40
+camera.position.z = 50.0
 
-geom1 = Mittsu::BoxGeometry.new(racket1_width, racket1_height, racket1_depth)
-mat1 = Mittsu::MeshBasicMaterial.new(color: 0xff0000)
-mesh1 = Mittsu::Mesh.new(geom1, mat1)
-scene.add(mesh1)
 
-# ラケット２
-racket2_width = 0.2
-racket2_height = 2
-racket2_depth = 2
+# オブジェクト(球体)の定義
+sphere_radius = 1.0
+sphere = Mittsu::Mesh.new(
+  Mittsu::SphereGeometry.new(sphere_radius, 16, 16),
+  Mittsu::MeshBasicMaterial.new(color: 0x00ff00)
+)
 
-geom2 = Mittsu::BoxGeometry.new(racket2_width, racket2_height, racket2_depth)
-mat2 = Mittsu::MeshBasicMaterial.new(color: 0x0000ff)
-mesh2 = Mittsu::Mesh.new(geom2, mat2)
-scene.add(mesh2)
+#ラケットA
+raketto_a_width = 1
+raketto_a_height = 10
+raketto_a_depth = 10
+raketto_a = Mittsu::Mesh.new(
+  Mittsu::BoxGeometry.new(raketto_a_width, raketto_a_height, raketto_a_depth),
+  Mittsu::MeshBasicMaterial.new(color: 0X0000FF, wireframe:false)
+)
 
-# ボール
-boll_radius = 0.1
-boll_width_segments = 8
-boll_height_segments = 8
+#ラケットB
+raketto_b_width = 1
+raketto_b_height = 10
+raketto_b_depth = 10
+raketto_b = Mittsu::Mesh.new(
+  Mittsu::BoxGeometry.new(raketto_b_width, raketto_b_height, raketto_b_depth),
+  Mittsu::MeshBasicMaterial.new(color: 0XFF0000, wireframe:false)
+)
 
-geom3 = Mittsu::SphereGeometry.new(boll_radius, boll_width_segments, boll_height_segments)
-mat3 = Mittsu::MeshBasicMaterial.new(color: 0x00ff00)
-mesh3 = Mittsu::Mesh.new(geom3, mat3)
-scene.add(mesh3)
+# 当たり判定のブロックとラケットとの適切な距離を求める公式
+w = (raketto_a_width).to_f
+l = (raketto_a_height).to_f
+# box_distance = (1.0/(2.0*w))*(w*w+1.0/4.0*l*l) + raketto_a_width/2.0 # 当たり判定のブロックとラケットの距離 # 1/4は0になる...これで１時間取られたってマ？
+box_distance = (1.0/(2.0*w))*(w*w+1.0/4.0*l*l)+raketto_a_width/2.0 # 当たり判定のブロックとラケットの距離 # 1/4は0になる...これで１時間取られたってマ？
+
+# ラケットAの当たり判定で使うブロック
+box_a = Mittsu::Mesh.new(
+  Mittsu::SphereGeometry.new(1, 16, 16),
+  Mittsu::MeshBasicMaterial.new(color: 0XFF0000, wireframe:false)
+)
+
+# ラケットBの当たり判定で使うブロック
+box_b = Mittsu::Mesh.new(
+  Mittsu::SphereGeometry.new(1, 16, 16),
+  Mittsu::MeshBasicMaterial.new(color: 0X00FF00, wireframe:false)
+)
+
+#卓球台
+table = create_table
+#卓球台の左足
+tableLeg_left = create_tableLeftLegs
+#卓球台の右足
+tableLeg_right = create_tableRightLegs
+
+# シーンにオブジェクトを追加する処理
+scene.add(sphere,raketto_a,raketto_b,box_a,box_b,table,tableLeg_left,tableLeg_right)
+
+
+
+# box_distanceと板の重なり具合を可視化
+
 
 # 位置調整
-mesh1.position.z = -4
-mesh1.position.x = 2
-mesh2.position.z = -4
-mesh2.position.x = -2
-mesh3.position.z = -4
-mesh3.position.x = -2
+raketto_x = 40  #ラケットのx座標の絶対値
+box_a.position.x = -1 * (box_distance + raketto_x)  #box_distanceはラケットとブロックの距離なので原点からラケットまでの距離を加算する
+box_b.position.x = 1 * (box_distance + raketto_x)#TODO 当たり判定の位置微調整
 
-# x軸を正向きに進むか負の向きに進むかのフラグ
-distance_Flag = 0
+#ボールの移動方向とスピード
+dx = 1
+dy = 0
+flag = 0  # ボールを動かすかのフラグ
 
-# ラケットとボールが接触したと判定する距離
-contact_distance = ((racket1_width + racket2_width)/2).to_f
-
+# レンダリングをしてくださいと命令する処理かな？
 renderer.window.run do
-    # ラケットとボールの間の距離を計算
-    distance1 = mesh1.position.distance_to(mesh3.position)
-    distance2 = mesh2.position.distance_to(mesh3.position)
+  random_Number = rand(0..0.1)
+  # ボールがラケットより後ろに行った後原点に戻り一時停止する。spaceを押したら再度ボールが動く
+  if renderer.window.key_down?(GLFW_KEY_SPACE)
+    flag = 0
+  end
 
-    if distance_Flag == 0
-        # racket1にボールが近づく
-        mesh3.position.x += 0.03
-    else
-        # racket2にボールが近づく
-        mesh3.position.x -= 0.03
-    end
+  # シーンに追加した球体をランダムに移動させる処理
+  if flag == 0
+    sphere.position.x += dx
+    sphere.position.y += dy
+  end
+  
+  #ラケットA
+  raketto_a.position.x = -1 * raketto_x
+  if renderer.window.key_down?(GLFW_KEY_S)
+    box_a.position.y -= 1
+    raketto_a.position.y -= 1
+  end
+  if renderer.window.key_down?(GLFW_KEY_W)
+    box_a.position.y += 1
+    raketto_a.position.y += 1
+  end
 
-    # 得られた距離が、互いのwidthの合計値以下になったら触れたと判定する
-    if distance1 <= contact_distance
-        distance_Flag = 1
-    elsif distance2 <= contact_distance
-        distance_Flag = 0
-    end
-renderer.render(scene, camera)
+  #ボールとラケットA側の当たり判定ボックスとの距離
+  distance = sphere.position.distance_to(box_a.position)
+  #当たり判定
+  if distance <= box_distance + sphere_radius
+    dx = 1
+    dy = random_Number
+  end
+
+  #ラケットB
+  raketto_b.position.x = 1 * raketto_x
+  if renderer.window.key_down?(GLFW_KEY_DOWN)
+    box_b.position.y -= 1
+    raketto_b.position.y -= 1
+  end
+  if renderer.window.key_down?(GLFW_KEY_UP)
+    box_b.position.y += 1
+    raketto_b.position.y += 1
+  end
+
+  #ボールとラケットB側の当たり判定ボックスとの距離
+  distance = sphere.position.distance_to(box_b.position)
+  #当たり判定
+  if distance <= box_distance + sphere_radius
+    dx = -1
+    dy = -1 * random_Number
+  end
+
+  # ボールがラケットより後ろに行った時の処理
+  # * ラケットより後ろに行く→原点に移動。この時移動を止める。spaceキーで再度動かすように実装
+  if sphere.position.x < -40 or sphere.position.x > 40
+    scene.remove(sphere)
+    sphere.position.x = 0
+    scene.add(sphere)
+    flag = 1
+  end
+
+  #卓球台の位置調整
+  table.position.x = 0
+
+  #カメラが座標(0,0,0)を見続ける
+  camera.look_at(Mittsu::Vector3.new(0, 0, 0))
+
+  # シーンとカメラの追加を行う処理
+  renderer.render(scene, camera)
 end

@@ -108,7 +108,7 @@ box_b.position.x = 1 * (box_distance + raketto_x)
 dx = 1
 dy = 0
 dz = -0.1
-flag = 0  # ボールを動かすかのフラグ
+flag = 1  # ボールを動かすかのフラグ. 0で動く。1で止まる
 #ラケットの速度
 SPEED_raketto = 0.5
 

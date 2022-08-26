@@ -107,14 +107,15 @@ box_b.position.x = 1 * (box_distance + raketto_x)
 #ボールの移動方向とスピード
 dx = 1
 dy = 0
-dz = -0.1
+dz = -1
 flag = 1  # ボールを動かすかのフラグ. 0で動く。1で止まる
 #ラケットの速度
 SPEED_raketto = 0.5
 
 # レンダリングをしてくださいと命令する処理かな？毎フレーム
 renderer.window.run do
-  random_Number = rand(0..0.1)
+  random_Number_y = rand(0..0.1)
+  random_Number_z = rand(1.0..10.0)
   # ボールがラケットより後ろに行った後原点に戻り一時停止する。spaceを押したら再度ボールが動く
   if renderer.window.key_down?(GLFW_KEY_SPACE)
     flag = 0
@@ -148,11 +149,11 @@ renderer.window.run do
 
   #ボールとラケットA側の当たり判定ボックスとの距離
   distance = sphere.position.distance_to(box_a.position)
-  #当たり判定
+  #ボールとラケットAの当たり判定
   if distance <= box_distance + sphere_radius + raketto_a_width#!raketto_a_widthは当たり判定を優しくするため加算
     dx = 1
-    dy = random_Number
-    dz *= -1
+    dy = random_Number_y
+    dz *= -1 * random_Number_z
   end
 
   #ラケットB
@@ -176,16 +177,16 @@ renderer.window.run do
 
   #ボールとラケットB側の当たり判定ボックスとの距離
   distance = sphere.position.distance_to(box_b.position)
-  #当たり判定
+  #ボールとラケットBの当たり判定
   if distance <= box_distance + sphere_radius + raketto_a_width#!raketto_a_widthは当たり判定を優しくするため加算
     dx = -1
-    dy = -1 * random_Number
-    dz *= -1
+    dy = -1 * random_Number_y
+    dz *= -1 * random_Number_z
   end
 
   #ボールと卓球台の距離を求める
   distance_table_to_boll = sphere.position.distance_to(table_box.position)
-  #当たり判定
+  #ボールと卓球台の当たり判定
   if distance_table_to_boll <= table_distance
     dz = 0.1
   end
